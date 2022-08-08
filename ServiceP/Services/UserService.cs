@@ -39,7 +39,7 @@ namespace ServiceP.Services
 
             if (user == null)
             {
-                throw new Exception("User not found");
+                throw new MissingException("User not found");
             }
             return user;
 

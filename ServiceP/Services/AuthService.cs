@@ -29,7 +29,7 @@ namespace ServiceP.Services
         {
             if (!IsValidEmail(t.email))
             {
-                throw new Exception("Invalid email");
+                throw new AppException("Invalid email address given. Provide a valid email address");
             }
             await _myCustomer.createCustomer(t);
 
@@ -41,7 +41,7 @@ namespace ServiceP.Services
         {
             if (!IsValidEmail(t.email))
             {
-                throw new Exception("Invalid email");
+                throw new AppException("Invalid email address given. Provide a valid email address");
             }
             await _myProvider.createProvider(t);
 
@@ -107,7 +107,7 @@ namespace ServiceP.Services
             var correct_password = verifyPasswordHash(password, a.password_hash, a.password_salt);
             if (!correct_password)
             {
-                throw new Exception("Wrong password");
+                throw new AppException("Incorrect username or password!");
             }
             return createToken(a, role);
         }

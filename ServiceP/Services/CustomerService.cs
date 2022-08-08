@@ -19,10 +19,10 @@ namespace ServiceP.Services
 
         public async Task<Customer> getByEmail(string email)
         {
-            Customer? a = await _dataContext.Customers.FirstAsync(y => y.email == email);
+            Customer? a = await _dataContext.Customers.FirstOrDefaultAsync(y => y.email == email);
             if (a == null)
             {
-                throw new Exception("Can't find");
+                throw new MissingException("Can't find the user");
             }
             return a;
         }
@@ -32,7 +32,7 @@ namespace ServiceP.Services
             Customer? a = await _dataContext.Customers.FindAsync(id);
             if (a == null)
             {
-                throw new Exception("Can't find");
+                throw new MissingException("Can't find the user");
             }
             return a;
         }

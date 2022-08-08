@@ -15,12 +15,12 @@ namespace ServiceP.Services
         }
         public async Task createService(int creatorId, ServiceBaseDto service)
         {
-            string HOUR_TYPE = "hour";
+            string HOUR_TYPE = "time";
             string QTY_TYPE = "qty";
-            //if (!service.service_type.Equals(HOUR_TYPE) || !service.service_type.Equals(QTY_TYPE))
-            //{
-              //  throw new Exception("Invalid type of service");
-            //}
+            if (!service.service_type.Equals(HOUR_TYPE) && !service.service_type.Equals(QTY_TYPE))
+            {
+                throw new AppException("Invalid type of service. Service type values can only be \"hour\" or  \"qty\"!");
+            }
 
             Provider creator = await _myProvider.getById(creatorId);
             Service newservice = new Service
@@ -63,7 +63,7 @@ namespace ServiceP.Services
             Service? foundService = await _dataContext.Services.Include(y => y.creator).FirstOrDefaultAsync( y => y.serviceId == service_id);
             if (foundService == null)
             {
-                throw new NotImplementedException();
+                throw new MissingException("Can't find the service");
 
                 //handle
             }
@@ -73,7 +73,7 @@ namespace ServiceP.Services
         {
             Service foundService = await GetService(service_id);
             
-            return ServiceDto.Service2ServiceResponseDto(foundService);
+            return ServiceBaseDto.Service2ServiceResponseDto(foundService);
         }
 
         public async Task<Service> GetService(int creatorId, int service_id)
@@ -82,7 +82,7 @@ namespace ServiceP.Services
             Console.WriteLine(foundService.creator.userId + " " + creatorId);
             if (!foundService.creator.userId.Equals(creatorId))
             {
-                throw new Exception("Service Doesn't exist");
+                throw new MissingException("Can't find the service.");
             }
             return foundService;
         }

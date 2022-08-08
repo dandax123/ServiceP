@@ -1,4 +1,5 @@
 ﻿using ServiceP.DTO;
+using ServiceP.Helper;
 using ServiceP.Models;
 using ServiceP.Repository;
 
@@ -52,7 +53,7 @@ namespace ServiceP.Services
             Booking? booking = await _dbcontext.Bookings.Where(y => y.bookingId == id && y.customer.userId == customerId).FirstAsync();
             if(booking == null)
             {
-                throw new Exception("Not found");
+                throw new MissingException("Booking Not found");
             }
             return booking;
         }

@@ -16,7 +16,7 @@ namespace ServiceP.Services
             Provider? a = await _dataContext.Providers.FindAsync(id);
             if (a == null)
             {
-                throw new Exception("Could not find");
+                throw new MissingException("Can't find the user");
             }
             return a;
         }
@@ -32,7 +32,7 @@ namespace ServiceP.Services
             Provider? a = await _dataContext.Providers.FirstOrDefaultAsync(y => y.email == email);
             if (a == null)
             {
-                throw new Exception("Could not find");
+                throw new MissingException("Can't find the user");
             }
             return a;
         }

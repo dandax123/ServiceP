@@ -1,6 +1,6 @@
 global using ServiceP.Data;
 global using Microsoft.EntityFrameworkCore;
-
+global using ServiceP.Helper;
 using ServiceP.Repository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -68,6 +68,7 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.UseMiddleware<ErrorHandlerMiddleware>();
 app.MapControllers();
 
 app.Run();

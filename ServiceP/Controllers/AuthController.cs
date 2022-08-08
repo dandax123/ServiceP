@@ -80,14 +80,13 @@ namespace ServiceP.Controllers
 
 
         [HttpPost("login/customer"), AllowAnonymous]
-        public async Task<ActionResult<LoginResponse>> CustomerLogin (LoginRequest request)
+
+        [ProducesResponseType(typeof(LoginResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(AppException), 400)]
+        public async Task<IActionResult> CustomerLogin (LoginRequest request)
         {
 
-            Customer? a = (Customer )await _myCustomerService.getByEmail(request.email);
-            if (a == null)
-            {
-                return BadRequest("User name or password is incorrect");
-            }
+            Customer a = await _myCustomerService.getByEmail(request.email);
             var token = await _myAuthService.login(request.password, a, "Customer");
             return Ok(new LoginResponse { token = token });
         }
