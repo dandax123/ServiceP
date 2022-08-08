@@ -41,6 +41,12 @@ namespace ServiceP.Services
             await _dbcontext.SaveChangesAsync();
         }
 
+        public async Task<IEnumerable<Booking>> getBookingsByService(int creatorId, int serviceId)
+        {
+            var bookings = await _dbcontext.Bookings.Where(y => y.service.serviceId == serviceId && y.service.creator.userId == creatorId).ToListAsync();
+            return bookings;
+        }
+
         public async Task<Booking> getBookingDetails(int customerId, int id)
         {
             Booking? booking = await _dbcontext.Bookings.Where(y => y.bookingId == id && y.customer.userId == customerId).FirstAsync();

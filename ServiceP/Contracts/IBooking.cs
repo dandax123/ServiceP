@@ -11,7 +11,7 @@ namespace ServiceP.Repository
         Task<IEnumerable<Booking>> getBookingsByCustomer(int customerId);
         Task<Booking> getBookingDetails(int customerId, int id);
 
-
+        Task<IEnumerable<Booking>> getBookingsByService(int creatorId, int serviceId);
 
         Task updateBooking(int customerId, int id, int quantity);
 

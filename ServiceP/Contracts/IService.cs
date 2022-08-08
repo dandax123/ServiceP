@@ -4,17 +4,19 @@ namespace ServiceP.Repository
 {
     public interface IService
     {
-        Task<IEnumerable<Service>> getAll();
+        Task<IEnumerable<ServiceResponseDto>> getAll();
 
 
-        Task<IEnumerable<Service>> getServicesByUser(int userId);
+        Task<IEnumerable<ServiceDto>> getServicesByUser(int userId);
+        Task<ServiceResponseDto> GetServiceDetails(int service_id);
         Task<Service> GetService(int service_id);
 
-        Task deleteService(int service_id);
+        Task<Service> GetService(int creatorId, int service_id);
+        Task deleteService(int creatorId, int service_id);
 
-        Task createService(int creatorId,  ServiceDto service);
+        Task createService(int creatorId, ServiceBaseDto service);
 
-        Task updateServiceDetails(ServiceDto service);
+        Task updateServiceDetails(int creatorId, int service_id, ServiceBaseDto service_request);
 
         Task<Provider> getProvider(int serviceId);
 
