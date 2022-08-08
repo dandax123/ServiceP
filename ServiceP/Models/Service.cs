@@ -9,6 +9,10 @@ namespace ServiceP.Models
         public int serviceId { get; set; }
 
         [Required]
+        [MaxLength(50)]
+        public string service_name { get; set; }
+
+        [Required]
 
         [MaxLength(300)]
         public string description { get; set; }
@@ -18,7 +22,7 @@ namespace ServiceP.Models
         [MaxLength(15)]
         public string service_type { get; set; }
 
-        public string status { get; set; }
+
 
 
         public Provider creator { get; set; }

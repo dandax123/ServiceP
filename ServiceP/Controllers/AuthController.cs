@@ -13,15 +13,18 @@ namespace ServiceP.Controllers
     {
 
         private  IAuth _myAuthService;
-        private IUser _myUserService;
+        private IProvider _myProviderService;
+        private ICustomer _myCustomerService;
+
         public Customer customer;
        
 
 
-        public AuthController(IAuth authService, IUser userService)
+        public AuthController(IAuth authService, IProvider myPService, ICustomer myCService)
         {
             _myAuthService = authService;
-            _myUserService = userService;
+            _myProviderService = myPService;
+            _myCustomerService = myCService;
         }
         
         // POST api/<AuthController>
@@ -79,7 +82,7 @@ namespace ServiceP.Controllers
         public async Task<ActionResult<Auth.LoginResponse>> CustomerLogin (Auth.LoginRequest request)
         {
 
-            User? a = await _myUserService.GetByEmail(request.email);
+            Customer? a = (Customer )await _myCustomerService.getByEmail(request.email);
             if (a == null)
             {
                 return BadRequest("User name or password is incorrect");
@@ -92,7 +95,7 @@ namespace ServiceP.Controllers
         public async Task<ActionResult<Auth.LoginResponse>> ProviderLogin(Auth.LoginRequest request)
         {
 
-            User? a = await _myUserService.GetByEmail(request.email);
+            Provider? a = await _myProviderService.getByEmail(request.email);
             if (a == null)
             {
                 return BadRequest("User name or password is incorrect");

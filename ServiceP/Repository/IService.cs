@@ -1,16 +1,19 @@
-﻿using ServiceP.Models;
+﻿using ServiceP.DTO;
+using ServiceP.Models;
 namespace ServiceP.Repository
 {
     public interface IService
     {
-        IEnumerable<Service> getAll();
+        Task<IEnumerable<Service>> getAll();
 
-        Service GetService(int service_id);
 
-        void deleteService(int service_id);
+        Task<IEnumerable<Service>> getServicesByUser(int userId);
+        Task<Service> GetService(int service_id);
 
-        void createService(Service service);
+        Task deleteService(int service_id);
 
-        void updateServer(Service service);
+        Task createService(int creatorId,  ServiceUpdateDto service);
+
+        Task updateServiceDetails(ServiceUpdateDto service);
     }
 }

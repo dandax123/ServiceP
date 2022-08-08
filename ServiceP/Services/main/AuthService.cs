@@ -17,13 +17,24 @@ namespace ServiceP.Services.main
 
         public async Task<ActionResult<String>> RegisterCustomer (Customer t)
         {
+            if (!IsValidEmail(t.email))
+            {
+                throw new Exception("Invalid email");
+            }
             await _myUserService.createCustomer(t);
+
             return createToken(t, "Customer");
         }
 
         public async Task<ActionResult<String>> RegisterProvider(Provider t)
+
         {
+            if (!IsValidEmail(t.email))
+            {
+                throw new Exception("Invalid email");
+            }
             await _myUserService.createProvider(t);
+
             return createToken(t, "Provider");
         }
         public AuthService(IConfiguration _t, IUser userService)
@@ -71,7 +82,8 @@ namespace ServiceP.Services.main
             List<Claim> claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Email, a.email),
-                new Claim (ClaimTypes.Role, role )
+                new Claim (ClaimTypes.Role, role ),
+                new Claim(ClaimTypes.Name, a.userId.ToString())
             };
             
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(_conf.GetSection("JwtSettings:secret").Value));

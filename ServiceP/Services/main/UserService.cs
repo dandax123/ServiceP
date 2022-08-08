@@ -38,7 +38,8 @@ namespace ServiceP.Services.main
 
         public  IEnumerable<User> getAll()
         {
-             var users = _dataContext.Users;
+            var users = _dataContext.Providers;
+                
             return users;
         }
 

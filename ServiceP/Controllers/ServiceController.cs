@@ -1,4 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using ServiceP.Auth;
+using ServiceP.Constants;
+using ServiceP.DTO;
+using ServiceP.Repository;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -8,6 +13,11 @@ namespace ServiceP.Controllers
     [ApiController]
     public class ServiceController : ControllerBase
     {
+        private IService _myService;
+        public ServiceController(IService iservice)
+        {
+            _myService = iservice;
+        }
         // GET: api/<ServiceController>
         [HttpGet]
         public IEnumerable<string> Get()
@@ -23,9 +33,15 @@ namespace ServiceP.Controllers
         }
 
         // POST api/<ServiceController>
-        [HttpPost]
-        public void Post([FromBody] string value)
+        [HttpPost, Authorize(Roles = Roles.Provider)]
+        public async Task<IActionResult> Post(ServiceUpdateDto service)
         {
+
+            int providerId = HttpContext.GetUserIdFromToken();
+ 
+            await _myService.createService(providerId, service);
+              
+            return Ok("Cool");
         }
 
         // PUT api/<ServiceController>/5

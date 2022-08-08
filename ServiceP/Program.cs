@@ -1,5 +1,6 @@
 global using ServiceP.Data;
 global using Microsoft.EntityFrameworkCore;
+
 using ServiceP.Repository;
 using ServiceP.Services.main;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -37,6 +38,9 @@ builder.Services.AddSwaggerGen(options =>
 
 builder.Services.AddScoped<IAuth, AuthService>();
 builder.Services.AddScoped<IUser, UserService>();
+builder.Services.AddScoped<IProvider, ProviderService>();
+builder.Services.AddScoped<IService, ServiceServices>();
+builder.Services.AddScoped<ICustomer, CustomerService>();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options => {
     options.TokenValidationParameters = new TokenValidationParameters
     {

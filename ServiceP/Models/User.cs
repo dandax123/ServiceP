@@ -4,7 +4,7 @@ namespace ServiceP.Models;
 
 public class User
 {
-    [JsonIgnore]
+
     public int userId { get; set; }
     public string first_name { get; set; } = string.Empty;
 
