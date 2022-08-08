@@ -1,12 +1,12 @@
 ﻿using ServiceP.Models;
 using ServiceP.Repository;
 
-namespace ServiceP.Services.main
+namespace ServiceP.Services
 {
     public class CustomerService : ICustomer
     {
         DataContext _dataContext;
-        public CustomerService(DataContext  data)
+        public CustomerService(DataContext data)
         {
             _dataContext = data;
 
@@ -20,7 +20,7 @@ namespace ServiceP.Services.main
         public async Task<Customer> getByEmail(string email)
         {
             Customer? a = await _dataContext.Customers.FirstAsync(y => y.email == email);
-            if(a == null)
+            if (a == null)
             {
                 throw new Exception("Can't find");
             }

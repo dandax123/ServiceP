@@ -7,9 +7,9 @@ using System.Text.RegularExpressions;
 using ServiceP.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ServiceP.Services.main
+namespace ServiceP.Services
 {
-    public class AuthService: IAuth
+    public class AuthService : IAuth
     {
 
         IConfiguration _conf;
@@ -25,7 +25,7 @@ namespace ServiceP.Services.main
             _myProvider = provider;
         }
 
-        public async Task<ActionResult<String>> RegisterCustomer (Customer t)
+        public async Task<ActionResult<string>> RegisterCustomer(Customer t)
         {
             if (!IsValidEmail(t.email))
             {
@@ -36,7 +36,7 @@ namespace ServiceP.Services.main
             return createToken(t, "Customer");
         }
 
-        public async Task<ActionResult<String>> RegisterProvider(Provider t)
+        public async Task<ActionResult<string>> RegisterProvider(Provider t)
 
         {
             if (!IsValidEmail(t.email))
@@ -47,7 +47,7 @@ namespace ServiceP.Services.main
 
             return createToken(t, "Provider");
         }
-       
+
         public bool IsValidEmail(string email)
         {
             string strRegex = @"^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}" +
@@ -81,7 +81,7 @@ namespace ServiceP.Services.main
                 var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
                 return computedHash.SequenceEqual(passwordHash);
             }
-        } 
+        }
 
         public string createToken(User a, string role)
         {
@@ -91,7 +91,7 @@ namespace ServiceP.Services.main
                 new Claim (ClaimTypes.Role, role ),
                 new Claim(ClaimTypes.Name, a.userId.ToString())
             };
-            
+
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(_conf.GetSection("JwtSettings:secret").Value));
             var cred = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 
@@ -102,10 +102,10 @@ namespace ServiceP.Services.main
             return token;
         }
 
-        public async Task<String> login(string password, User a, string role)
+        public async Task<string> login(string password, User a, string role)
         {
             var correct_password = verifyPasswordHash(password, a.password_hash, a.password_salt);
-            if(!correct_password)
+            if (!correct_password)
             {
                 throw new Exception("Wrong password");
             }

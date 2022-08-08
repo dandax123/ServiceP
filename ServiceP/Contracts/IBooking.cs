@@ -1,4 +1,5 @@
-﻿using ServiceP.Models;
+﻿using ServiceP.DTO;
+using ServiceP.Models;
 namespace ServiceP.Repository
 {
     public interface IBooking
@@ -8,13 +9,13 @@ namespace ServiceP.Repository
 
 
         Task<IEnumerable<Booking>> getBookingsByCustomer(int customerId);
-        Task<Booking> get(int id);
+        Task<Booking> getBookingDetails(int customerId, int id);
 
 
 
-        void updateBooking(Booking booking);
+        Task updateBooking(int customerId, int id, int quantity);
 
-        void deleteBooking(int id);
+        Task deleteBooking(int customerId, int id);
 
 
         Task addBooking(int serviceId, int customerId, int quantity);

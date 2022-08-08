@@ -1,7 +1,8 @@
-﻿using ServiceP.Models;
+﻿using ServiceP.DTO;
+using ServiceP.Models;
 using ServiceP.Repository;
 
-namespace ServiceP.Services.main
+namespace ServiceP.Services
 {
     public class BookingService : IBooking
     {
@@ -15,13 +16,14 @@ namespace ServiceP.Services.main
             _myService = service;
             _myCustomer = customer;
         }
-        public async Task addBooking(int serviceId, int customerId,   int quantity)
+        public async Task addBooking(int serviceId, int customerId, int quantity)
         {
             Service service = await _myService.GetService(serviceId);
             Customer customer = await _myCustomer.getById(customerId);
-            Booking newBooking = new Booking {
+            Booking newBooking = new Booking
+            {
                 service = service,
-                customer  = customer,
+                customer = customer,
                 quantity = quantity
 
             };
@@ -29,20 +31,24 @@ namespace ServiceP.Services.main
             await _dbcontext.SaveChangesAsync();
         }
 
-    
-        public void createBooking(Booking booking)
+
+
+        public async Task deleteBooking(int customerId, int id)
         {
-            throw new NotImplementedException();
+
+            Booking booking = await getBookingDetails(customerId, id);
+            _dbcontext.Bookings.Remove(booking);
+            await _dbcontext.SaveChangesAsync();
         }
 
-        public void deleteBooking(int id)
+        public async Task<Booking> getBookingDetails(int customerId, int id)
         {
-            throw new NotImplementedException();
-        }
-
-        public async Task<Booking> get(int id)
-        {
-            throw new NotImplementedException();
+            Booking? booking = await _dbcontext.Bookings.Where(y => y.bookingId == id && y.customer.userId == customerId).FirstAsync();
+            if(booking == null)
+            {
+                throw new Exception("Not found");
+            }
+            return booking;
         }
 
         public Task<IEnumerable<Booking>> getAll()
@@ -56,9 +62,11 @@ namespace ServiceP.Services.main
             return bookings;
         }
 
-        public void updateBooking(Booking booking)
+        public async Task updateBooking(int customerId, int id, int quantity)
         {
-            throw new NotImplementedException();
+            Booking booking = await getBookingDetails(customerId, id);
+            booking.quantity = quantity;
+            await _dbcontext.SaveChangesAsync();
         }
     }
 }

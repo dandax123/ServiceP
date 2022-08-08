@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ServiceP.DTO;
 using ServiceP.Models;
 using ServiceP.Repository;
 
@@ -29,7 +30,7 @@ namespace ServiceP.Controllers
         
         // POST api/<AuthController>
         [HttpPost("register/provider")]
-        public async Task<ActionResult<Auth.LoginResponse>> ProviderRegistration(Auth.ProviderRegistrationRequest request)
+        public async Task<ActionResult<LoginResponse>> ProviderRegistration(ProviderRegistrationRequest request)
         {
             //validation and others
             _myAuthService.createPasswordHash(request.password, out byte[] passwordHash, out byte[] passwordSalt);
@@ -45,7 +46,7 @@ namespace ServiceP.Controllers
               };
 
             var token =  await _myAuthService.RegisterProvider(provider);
-            var response = new Auth.LoginResponse
+            var response = new LoginResponse
             {
                 token = token.Value
             };
@@ -56,7 +57,7 @@ namespace ServiceP.Controllers
 
 
         [HttpPost("register/customer")]
-        public async Task<ActionResult<String>> CustomerRegistration(Auth.BaseRegistrationRequest request)
+        public async Task<ActionResult<String>> CustomerRegistration(BaseRegistrationRequest request)
         {
             //validation and others
             _myAuthService.createPasswordHash(request.password, out byte[] passwordHash, out byte[] passwordSalt);
@@ -73,13 +74,13 @@ namespace ServiceP.Controllers
 
             var token = await _myAuthService.RegisterCustomer(customer);
 
-            return Ok(new Auth.LoginResponse { token = token.Value});
+            return Ok(new LoginResponse { token = token.Value});
 
         }
 
 
         [HttpPost("login/customer"), AllowAnonymous]
-        public async Task<ActionResult<Auth.LoginResponse>> CustomerLogin (Auth.LoginRequest request)
+        public async Task<ActionResult<LoginResponse>> CustomerLogin (LoginRequest request)
         {
 
             Customer? a = (Customer )await _myCustomerService.getByEmail(request.email);
@@ -88,11 +89,11 @@ namespace ServiceP.Controllers
                 return BadRequest("User name or password is incorrect");
             }
             var token = await _myAuthService.login(request.password, a, "Customer");
-            return Ok(new Auth.LoginResponse { token = token });
+            return Ok(new LoginResponse { token = token });
         }
 
         [HttpPost("login/provider"), AllowAnonymous]
-        public async Task<ActionResult<Auth.LoginResponse>> ProviderLogin(Auth.LoginRequest request)
+        public async Task<ActionResult<LoginResponse>> ProviderLogin(LoginRequest request)
         {
 
             Provider? a = await _myProviderService.getByEmail(request.email);
@@ -101,7 +102,7 @@ namespace ServiceP.Controllers
                 return BadRequest("User name or password is incorrect");
             }
             var token = await _myAuthService.login(request.password, a, "Provider");
-            return Ok(new Auth.LoginResponse { token = token});
+            return Ok(new LoginResponse { token = token});
         }
 
 

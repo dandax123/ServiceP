@@ -26,20 +26,6 @@ namespace ServiceP.Controllers
         }
 
 
-        [HttpGet("bookings"), Authorize(Roles = Roles.Customer)]
-        public void GetBookings ()
-        {
-        
-        }
-
-
-
-        // POST api/<CustomerController>
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-
-        }
 
 
         // PUT api/<CustomerController>/5

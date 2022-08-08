@@ -11,6 +11,7 @@ namespace ServiceP.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = Roles.Customer)]
     public class BookingController : ControllerBase
     {
         IBooking _myBookingService;
@@ -19,7 +20,7 @@ namespace ServiceP.Controllers
             _myBookingService = bookingService;
         }
 
-        [HttpGet, Authorize(Roles = Roles.Customer)]
+        [HttpGet]
         public async Task<IEnumerable<Booking>> Get()
         {
             int customerId = HttpContext.GetUserIdFromToken();
@@ -31,12 +32,14 @@ namespace ServiceP.Controllers
         [HttpGet("{id}")]
         public async Task<Booking> Get(int id)
         {
-            var booking = await _myBookingService.get(id);
+
+            int customerId = HttpContext.GetUserIdFromToken();
+            var booking = await _myBookingService.getBookingDetails(customerId, id);
             return booking;
         }
 
         // POST api/<ServiceController>
-        [HttpPost, Authorize(Roles = Roles.Customer)]
+        [HttpPost]
         public async Task<IActionResult> Post(BookingDto booking)
         {
 
@@ -49,16 +52,18 @@ namespace ServiceP.Controllers
 
         // PUT api/<ServiceController>/5
         [HttpPut("{id}")]
-        public async Task Put(int id, [FromBody] ServiceDto value)
+        public async Task Put(int id, [FromBody] BookingUpdateDto request)
         {
-
+            int customerId = HttpContext.GetUserIdFromToken();
+            await _myBookingService.updateBooking(customerId, id, request.quantity);
         }
 
         // DELETE api/<ServiceController>/5
         [HttpDelete("{id}")]
         public async Task Delete(int id)
         {
-
+            int customerId = HttpContext.GetUserIdFromToken();
+            await _myBookingService.deleteBooking(customerId, id);
         }
     }
 }

@@ -2,11 +2,11 @@
 using ServiceP.Models;
 using ServiceP.Repository;
 
-namespace ServiceP.Services.main
+namespace ServiceP.Services
 {
     public class ProviderService : IProvider
     {
-         DataContext _dataContext;
+        DataContext _dataContext;
         public ProviderService(DataContext dataContext)
         {
             _dataContext = dataContext;
@@ -14,7 +14,7 @@ namespace ServiceP.Services.main
         public async Task<Provider> getById(int id)
         {
             Provider? a = await _dataContext.Providers.FindAsync(id);
-            if(a == null)
+            if (a == null)
             {
                 throw new Exception("Could not find");
             }
@@ -28,7 +28,7 @@ namespace ServiceP.Services.main
         }
         public async Task<Provider> getByEmail(string email)
         {
-           
+
             Provider? a = await _dataContext.Providers.FirstOrDefaultAsync(y => y.email == email);
             if (a == null)
             {

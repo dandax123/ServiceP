@@ -2,7 +2,7 @@
 using ServiceP.Models;
 using ServiceP.DTO;
 
-namespace ServiceP.Services.main
+namespace ServiceP.Services
 {
     public class ServiceServices : IService
     {
@@ -17,7 +17,7 @@ namespace ServiceP.Services.main
         {
             if (service.type != "Hour" || service.type != "Quantity")
             {
-                    //handle later
+                //handle later
             }
 
             Provider creator = await _myProvider.getById(creatorId);
@@ -40,9 +40,9 @@ namespace ServiceP.Services.main
 
         }
 
-        public async Task<IEnumerable<Models.Service>> getAll()
+        public async Task<IEnumerable<Service>> getAll()
         {
-            return (await _dataContext.Services.ToListAsync());
+            return await _dataContext.Services.ToListAsync();
         }
 
         public async Task<Provider> getProvider(int serviceId)
@@ -53,10 +53,10 @@ namespace ServiceP.Services.main
 
         }
 
-        public async Task<Models.Service> GetService(int service_id)
+        public async Task<Service> GetService(int service_id)
         {
             Service? foundService = await _dataContext.Services.FindAsync(service_id);
-            if(foundService == null)
+            if (foundService == null)
             {
                 throw new NotImplementedException();
 
@@ -65,7 +65,7 @@ namespace ServiceP.Services.main
             return foundService;
         }
 
-        public async  Task<IEnumerable<Service>> getServicesByUser(int userId)
+        public async Task<IEnumerable<Service>> getServicesByUser(int userId)
         {
             var services = await _dataContext.Services.Where(y => y.creator.userId == userId).ToListAsync();
             return services;

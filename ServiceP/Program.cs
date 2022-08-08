@@ -2,11 +2,11 @@ global using ServiceP.Data;
 global using Microsoft.EntityFrameworkCore;
 
 using ServiceP.Repository;
-using ServiceP.Services.main;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
+using ServiceP.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -1,39 +1,38 @@
-﻿
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace ServiceP.Auth
+namespace ServiceP.DTO
 {
 
-    public class BaseRegistrationRequest 
+    public class BaseRegistrationRequest
     {
         [Required(ErrorMessage = "Provide your password")]
-        public string password {get; set;}
+        public string password { get; set; }
 
         [Required(ErrorMessage = "Provide your email")]
         public string email { get; set; }
 
         [Required(ErrorMessage = "Provide your First Name")]
-        public string first_name  {get; set;}
+        public string first_name { get; set; }
 
         [Required(ErrorMessage = "Provide your Last Name")]
-        public string last_name {get; set;}
-        
+        public string last_name { get; set; }
+
 
 
     }
 
     public class LoginRequest
     {
-        [Required(ErrorMessage ="Provide your password")]
+        [Required(ErrorMessage = "Provide your password")]
         public string password { get; set; }
-        
+
         [Required(ErrorMessage = "Provide your email")]
         public string email { get; set; }
     }
 
     public class LoginResponse
     {
-           public string token { get; set; }
+        public string token { get; set; }
     }
     public class ProviderRegistrationRequest : BaseRegistrationRequest
     {
