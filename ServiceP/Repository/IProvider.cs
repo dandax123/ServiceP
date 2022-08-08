@@ -1,4 +1,5 @@
-﻿using ServiceP.Models;
+﻿using ServiceP.DTO;
+using ServiceP.Models;
 
 namespace ServiceP.Repository
 {
@@ -6,5 +7,14 @@ namespace ServiceP.Repository
     {
         Task<Provider> getById(int id);
         Task<Provider> getByEmail(string email);
+
+        Task<IEnumerable<Provider>> getAllProviders();
+
+        Task createProvider(Provider user);
+
+
+
+
+
     }
 }

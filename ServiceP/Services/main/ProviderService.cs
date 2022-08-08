@@ -1,4 +1,5 @@
-﻿using ServiceP.Models;
+﻿using ServiceP.DTO;
+using ServiceP.Models;
 using ServiceP.Repository;
 
 namespace ServiceP.Services.main
@@ -19,6 +20,12 @@ namespace ServiceP.Services.main
             }
             return a;
         }
+        public async Task createProvider(Provider user)
+        {
+            await _dataContext.Providers.AddAsync(user);
+            await _dataContext.SaveChangesAsync();
+
+        }
         public async Task<Provider> getByEmail(string email)
         {
            
@@ -29,5 +36,11 @@ namespace ServiceP.Services.main
             }
             return a;
         }
+
+        public Task<IEnumerable<Provider>> getAllProviders()
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }

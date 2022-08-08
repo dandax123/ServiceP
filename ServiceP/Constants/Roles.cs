@@ -4,7 +4,7 @@
 public class Roles
 {
     public const string Customer = "Customer";
-    public const string Admin = "Admin";
-    public const string Provider = "Provider";
+    public const string Provider = Customer + "," + "Provider";
+    public const string Admin = Provider + "," + "Admin";
 
 }

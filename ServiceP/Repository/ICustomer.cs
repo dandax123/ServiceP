@@ -7,5 +7,9 @@ namespace ServiceP.Repository
     {
         Task<Customer> getById(int id);
         Task<Customer> getByEmail(string email);
+
+        Task createCustomer(Customer user);
+
+
     }
 }

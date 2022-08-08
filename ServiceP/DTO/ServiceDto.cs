@@ -2,7 +2,7 @@
 
 namespace ServiceP.DTO
 {
-    public class ServiceUpdateDto
+    public class ServiceDto
     {
         [Required]
         [MaxLength(300)]
@@ -14,5 +14,9 @@ namespace ServiceP.DTO
         [Required]
         public string type { get; set; }
 
+    }
+    public class ServiceResponseDto: ServiceDto
+    {
+        public string creator { get; set; }
     }
 }

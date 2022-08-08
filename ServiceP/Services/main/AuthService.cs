@@ -13,7 +13,17 @@ namespace ServiceP.Services.main
     {
 
         IConfiguration _conf;
-        IUser _myUserService;
+
+
+        ICustomer _myCustomer;
+        IProvider _myProvider;
+        public AuthService(IConfiguration _t, IUser userService, ICustomer customer, IProvider provider)
+        {
+            _conf = _t;
+
+            _myCustomer = customer;
+            _myProvider = provider;
+        }
 
         public async Task<ActionResult<String>> RegisterCustomer (Customer t)
         {
@@ -21,7 +31,7 @@ namespace ServiceP.Services.main
             {
                 throw new Exception("Invalid email");
             }
-            await _myUserService.createCustomer(t);
+            await _myCustomer.createCustomer(t);
 
             return createToken(t, "Customer");
         }
@@ -33,15 +43,11 @@ namespace ServiceP.Services.main
             {
                 throw new Exception("Invalid email");
             }
-            await _myUserService.createProvider(t);
+            await _myProvider.createProvider(t);
 
             return createToken(t, "Provider");
         }
-        public AuthService(IConfiguration _t, IUser userService)
-        {
-            _conf = _t;
-            _myUserService = userService;
-        }
+       
         public bool IsValidEmail(string email)
         {
             string strRegex = @"^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}" +

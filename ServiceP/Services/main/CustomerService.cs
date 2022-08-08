@@ -11,6 +11,12 @@ namespace ServiceP.Services.main
             _dataContext = data;
 
         }
+        public async Task createCustomer(Customer user)
+        {
+            await _dataContext.Customers.AddAsync(user);
+            await _dataContext.SaveChangesAsync();
+        }
+
         public async Task<Customer> getByEmail(string email)
         {
             Customer? a = await _dataContext.Customers.FirstAsync(y => y.email == email);

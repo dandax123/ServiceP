@@ -4,14 +4,20 @@ namespace ServiceP.Repository
     public interface IBooking
     {
 
-        IEnumerable<Booking> getAll();
+        Task<IEnumerable<Booking>> getAll();
 
-        Booking get(int id);
+
+        Task<IEnumerable<Booking>> getBookingsByCustomer(int customerId);
+        Task<Booking> get(int id);
+
+
 
         void updateBooking(Booking booking);
 
         void deleteBooking(int id);
 
-        void createBooking(Booking booking);
+
+        Task addBooking(int serviceId, int customerId, int quantity);
+
     }
 }

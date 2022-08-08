@@ -12,8 +12,11 @@ namespace ServiceP.Repository
 
         Task deleteService(int service_id);
 
-        Task createService(int creatorId,  ServiceUpdateDto service);
+        Task createService(int creatorId,  ServiceDto service);
 
-        Task updateServiceDetails(ServiceUpdateDto service);
+        Task updateServiceDetails(ServiceDto service);
+
+        Task<Provider> getProvider(int serviceId);
+
     }
 }

@@ -41,6 +41,8 @@ builder.Services.AddScoped<IUser, UserService>();
 builder.Services.AddScoped<IProvider, ProviderService>();
 builder.Services.AddScoped<IService, ServiceServices>();
 builder.Services.AddScoped<ICustomer, CustomerService>();
+builder.Services.AddScoped<IBooking, BookingService>();
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options => {
     options.TokenValidationParameters = new TokenValidationParameters
     {

@@ -13,7 +13,7 @@ namespace ServiceP.Services.main
             _dataContext = dataContext;
             _myProvider = a;
         }
-        public async Task createService(int creatorId, ServiceUpdateDto service)
+        public async Task createService(int creatorId, ServiceDto service)
         {
             if (service.type != "Hour" || service.type != "Quantity")
             {
@@ -45,6 +45,14 @@ namespace ServiceP.Services.main
             return (await _dataContext.Services.ToListAsync());
         }
 
+        public async Task<Provider> getProvider(int serviceId)
+        {
+            Service y = await GetService(serviceId);
+
+            return y.creator;
+
+        }
+
         public async Task<Models.Service> GetService(int service_id)
         {
             Service? foundService = await _dataContext.Services.FindAsync(service_id);
@@ -63,7 +71,7 @@ namespace ServiceP.Services.main
             return services;
         }
 
-        public Task updateServiceDetails(ServiceUpdateDto service)
+        public Task updateServiceDetails(ServiceDto service)
         {
             throw new NotImplementedException();
         }
