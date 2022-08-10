@@ -9,11 +9,13 @@ namespace ServiceP.Repository
         Task<Provider> getByEmail(string email);
 
         Task<IEnumerable<Provider>> getAllProviders();
-
-        Task createProvider(Provider user);
-
+        Task<string> RegisterProvider(ProviderRegistrationRequest request);
 
 
+
+        Task updateProvider(int user_id, UserDto a);
+
+        Task deleteProvider(int user_id);
 
 
     }

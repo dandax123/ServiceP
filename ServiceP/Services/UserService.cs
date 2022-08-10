@@ -14,21 +14,24 @@ namespace ServiceP.Services
 
 
 
-        public async Task<User> GetByEmail(string email)
+        public async Task<bool> is_duplicate_email(string email)
         {
-            var user = await _dataContext.Users.FirstAsync(y => y.email == email);
-
+            User? user = await _dataContext.Users.FirstOrDefaultAsync(y => y.email == email);
+            
             //error handling
-            return user;
-        }
-        public void DeleteUser(int id)
-        {
-            throw new NotImplementedException();
+            return user != null;
         }
 
-        public IEnumerable<User> getAll()
+        public async Task DeleteUser(int id)
         {
-            var users = _dataContext.Providers;
+            User user = await GetById (id);
+            _dataContext.Users.Remove(user);
+            await _dataContext.SaveChangesAsync();
+        }
+
+        public async Task<List<User>> getAll()
+        {
+            var users = await _dataContext.Users.ToListAsync();
 
             return users;
         }
@@ -42,6 +45,31 @@ namespace ServiceP.Services
                 throw new MissingException("User not found");
             }
             return user;
+
+        }
+
+        public async  Task<User> FindUserRoleByEmail(string email)
+        {
+            
+            Provider? a = await _dataContext.Providers.FirstOrDefaultAsync(y => y.email == email);
+            Console.WriteLine(a);
+            if (a != null)
+            {
+                a.role = "Provider";
+                return a;
+            }
+
+            Customer? b = await _dataContext.Customers.FirstOrDefaultAsync(y => y.email == email);
+            Console.WriteLine(b);
+            if (b != null)
+            {
+                b.role = "Customer";
+                return b;
+            }
+            
+
+            
+            throw new AppException("Incorrect Username or password");
 
         }
 

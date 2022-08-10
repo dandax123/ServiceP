@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace ServiceP.Models;
 
@@ -11,6 +12,8 @@ public class User
     public string last_name { get; set; } = string.Empty;
 
     public string email { get; set; } = string.Empty;
+
+    public string role { get; set; } = "Customer";
 
     [JsonIgnore]
     public byte[] password_hash { get; set; }

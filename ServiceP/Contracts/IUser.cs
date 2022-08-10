@@ -4,11 +4,12 @@ namespace ServiceP.Repository;
 
 public interface IUser
 {
-    IEnumerable<User> getAll();
+    Task<List<User>> getAll();
     Task<User> GetById(int userId);
+    Task<bool> is_duplicate_email(string email);
+    Task<User> FindUserRoleByEmail(string email);
 
-
-    void DeleteUser(int id);
+    Task DeleteUser(int id);
 
     User updateUser(User user);
     

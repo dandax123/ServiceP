@@ -6,6 +6,7 @@ using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using ServiceP.Models;
 using Microsoft.AspNetCore.Mvc;
+using ServiceP.DTO;
 
 namespace ServiceP.Services
 {
@@ -15,40 +16,18 @@ namespace ServiceP.Services
         IConfiguration _conf;
 
 
-        ICustomer _myCustomer;
-        IProvider _myProvider;
-        public AuthService(IConfiguration _t, IUser userService, ICustomer customer, IProvider provider)
+        IUser _myUser;
+        public AuthService(IConfiguration _t, IUser userService, IUser myUser)
         {
             _conf = _t;
-
-            _myCustomer = customer;
-            _myProvider = provider;
+            _myUser = myUser;   
         }
 
-        public async Task<ActionResult<string>> RegisterCustomer(Customer t)
-        {
-            if (!IsValidEmail(t.email))
-            {
-                throw new AppException("Invalid email address given. Provide a valid email address");
-            }
-            await _myCustomer.createCustomer(t);
+        
 
-            return createToken(t, "Customer");
-        }
+ 
 
-        public async Task<ActionResult<string>> RegisterProvider(Provider t)
-
-        {
-            if (!IsValidEmail(t.email))
-            {
-                throw new AppException("Invalid email address given. Provide a valid email address");
-            }
-            await _myProvider.createProvider(t);
-
-            return createToken(t, "Provider");
-        }
-
-        public bool IsValidEmail(string email)
+        public static bool IsValidEmail(string email)
         {
             string strRegex = @"^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}" +
                  @"\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\" +
@@ -65,7 +44,7 @@ namespace ServiceP.Services
             }
         }
 
-        public void createPasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
+        public static void createPasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
             using (var hmac = new HMACSHA512())
             {
@@ -74,7 +53,7 @@ namespace ServiceP.Services
             }
         }
 
-        public bool verifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
+        public static bool verifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
         {
             using (var hmac = new HMACSHA512(passwordSalt))
             {
@@ -83,12 +62,12 @@ namespace ServiceP.Services
             }
         }
 
-        public string createToken(User a, string role)
+        public  string createToken(User a)
         {
             List<Claim> claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Email, a.email),
-                new Claim (ClaimTypes.Role, role ),
+                new Claim (ClaimTypes.Role, a.role ),
                 new Claim(ClaimTypes.Name, a.userId.ToString())
             };
 
@@ -102,14 +81,15 @@ namespace ServiceP.Services
             return token;
         }
 
-        public async Task<string> login(string password, User a, string role)
+        public async Task<string> login(LoginRequest request)
         {
-            var correct_password = verifyPasswordHash(password, a.password_hash, a.password_salt);
+            User a = await _myUser.FindUserRoleByEmail(request.email);
+            var correct_password = verifyPasswordHash(request.password, a.password_hash, a.password_salt);
             if (!correct_password)
             {
                 throw new AppException("Incorrect username or password!");
             }
-            return createToken(a, role);
+            return createToken(a);
         }
     }
 }

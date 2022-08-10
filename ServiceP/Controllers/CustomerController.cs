@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using ServiceP.Auth;
 using ServiceP.Constants;
+using ServiceP.DTO;
+using ServiceP.Repository;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -11,33 +13,51 @@ namespace ServiceP.Controllers
     [ApiController]
     public class CustomerController : ControllerBase
     {
+        ICustomer _myCustomerService;
+        public CustomerController(ICustomer myCustomerService)
+        {
+            _myCustomerService = myCustomerService; 
+        }
         // GET: api/<CustomerController>
-        [HttpGet]
-        public IEnumerable<string> Get()
+
+
+        [HttpGet, Authorize(Roles = Roles.Customer)]
+        public async Task<UserDescribeDto> Get()
         {
-            return new string[] { "value1", "value2" };
+            int customerId = HttpContext.GetUserIdFromToken();
+            return UserDto.User2UserDescribeDTO(await _myCustomerService.getById(customerId));
         }
 
-        // GET api/<CustomerController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpPost]
+        [ProducesResponseType(typeof(ApiError), 400)]
+        public async Task<ActionResult<String>> CustomerRegistration(BaseRegistrationRequest request)
         {
-            return "value";
+           
+            var token = await _myCustomerService.RegisterCustomer(request);
+
+            return Ok(new LoginResponse { token = token });
+
         }
 
 
-
-
-        // PUT api/<CustomerController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut, Authorize(Roles = Roles.Customer)]
+        [ProducesResponseType(typeof(ApiError), 400)]
+        [ProducesResponseType(typeof(ApiError), 404)]
+        public async Task<IActionResult> Put([FromBody] UserDto value)
         {
+            int customerId = HttpContext.GetUserIdFromToken();
+            await _myCustomerService.updateCustomer(customerId, value);
+            return Ok(new ApiSuccess("Successfully updated customer"));
         }
 
         // DELETE api/<CustomerController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpDelete, Authorize(Roles = Roles.Customer)]
+        [ProducesResponseType(typeof(ApiError), 404)]
+        public async Task<IActionResult> Delete()
         {
+            int customerId = HttpContext.GetUserIdFromToken();
+            await _myCustomerService.deleteCustomer(customerId);
+            return Ok(new ApiSuccess("Successfully deleted customer"));
         }
     }
 }

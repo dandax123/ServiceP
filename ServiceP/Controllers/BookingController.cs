@@ -30,6 +30,8 @@ namespace ServiceP.Controllers
 
         // GET api/<ServiceController>/5
         [HttpGet("{id}")]
+        [ProducesResponseType(typeof(ApiError), 400)]
+        [ProducesResponseType(typeof(ApiError), 404)]
         public async Task<Booking> Get(int id)
         {
 
@@ -40,6 +42,9 @@ namespace ServiceP.Controllers
 
         // POST api/<ServiceController>
         [HttpPost]
+        [ProducesResponseType(typeof(ApiError), 400)]
+        [ProducesResponseType(typeof(ApiSuccess), 200)]
+        [ProducesResponseType(typeof(ApiError), 404)]
         public async Task<IActionResult> Post(BookingDto booking)
         {
 
@@ -47,23 +52,30 @@ namespace ServiceP.Controllers
 
             await _myBookingService.addBooking(booking.serviceId, customerId, booking.quantity);
 
-            return Ok("Cool");
+            return Ok(new ApiSuccess ( "Successfully created the booking"));
         }
 
         // PUT api/<ServiceController>/5
         [HttpPut("{id}")]
-        public async Task Put(int id, [FromBody] BookingUpdateDto request)
+        [ProducesResponseType(typeof(ApiError), 400)]
+        [ProducesResponseType(typeof(ApiSuccess), 200)]
+        [ProducesResponseType(typeof(ApiError), 404)]
+        public async Task<IActionResult> Put(int id, [FromBody] BookingUpdateDto request)
         {
             int customerId = HttpContext.GetUserIdFromToken();
             await _myBookingService.updateBooking(customerId, id, request.quantity);
+            return Ok(new ApiSuccess("Successfully updated the booking"));
         }
 
         // DELETE api/<ServiceController>/5
         [HttpDelete("{id}")]
-        public async Task Delete(int id)
+        [ProducesResponseType(typeof(ApiError), 404)]
+        [ProducesResponseType(typeof(ApiSuccess), 200)]
+        public async Task<IActionResult> Delete(int id)
         {
             int customerId = HttpContext.GetUserIdFromToken();
             await _myBookingService.deleteBooking(customerId, id);
+            return Ok(new ApiSuccess("Successfully deleted the booking"));
         }
     }
 }

@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ServiceP.DTO;
 using ServiceP.Models;
 using ServiceP.Repository;
 
 namespace ServiceP.Controllers;
 
-[Route("api/[controller]")]
+[Route("api/[controller]s")]
 [ApiController]
 public class UserController : ControllerBase
 {
@@ -18,36 +19,28 @@ public class UserController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<User>>> Get()
+    public async Task<List<User>> Get()
     {
-       
-        return Ok(_userService.getAll());
+
+        return (await _userService.getAll());
     }
 
-    [HttpPost]
-
-    public async Task<ActionResult<User>> Post(User new_user)
+    [HttpGet("customers")]
+    public async Task<List<User>> GetCustomers()
     {
-        return Ok(new_user);
+
+        return (await _userService.getAll());
     }
 
-    [HttpGet("{user_id}")]
-    public async Task<ActionResult<User>> Get (int user_id)
+    [HttpGet("providers")]
+    public async Task<List<User>> GetProviders()
     {
-        return Ok(new User { userId = user_id , first_name="cc", last_name="cc"});
+
+        return (await _userService.getAll());
     }
 
-    [HttpPut]
-    public async Task<ActionResult<User>> Put(User new_user)
-    {
-        return Ok(new_user);
-    }
 
-    [HttpDelete("{user_id}")]
-    public async Task<ActionResult<User>> Delete(int user_id)
-    {
-        return Ok(new User { userId = user_id , first_name="cc", last_name="cc"});
+    
 
-    }
 }
     

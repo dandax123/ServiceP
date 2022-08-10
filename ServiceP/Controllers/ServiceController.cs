@@ -25,6 +25,8 @@ namespace ServiceP.Controllers
 
         // GET: api/<ServiceController>
         [HttpGet("my_services")]
+        [ProducesResponseType(typeof(ApiError), 400)]
+        [ProducesResponseType(typeof(ApiError), 404)]
         public async Task<IEnumerable<ServiceDto>> GetMyServices()
         {
             int providerId = HttpContext.GetUserIdFromToken(); 
@@ -40,6 +42,7 @@ namespace ServiceP.Controllers
 
         // GET api/<ServiceController>/5
         [HttpGet("{id}"), AllowAnonymous]
+        [ProducesResponseType(typeof(ApiError), 404)]
         public async Task<ServiceResponseDto> Get(int id)
         {
 
@@ -48,6 +51,8 @@ namespace ServiceP.Controllers
         }
 
         [HttpGet("{id}/bookings")]
+        [ProducesResponseType(typeof(ApiError), 400)]
+        [ProducesResponseType(typeof(ApiError), 404)]
         public async Task<IEnumerable<Booking>> GetBookingsForService(int id)
         {
             int providerId = HttpContext.GetUserIdFromToken();
@@ -56,6 +61,9 @@ namespace ServiceP.Controllers
         }
         // POST api/<ServiceController>
         [HttpPost]
+        [ProducesResponseType(typeof(ApiSuccess), 200)]
+        [ProducesResponseType(typeof(ApiError), 400)]
+        [ProducesResponseType(typeof(ApiError), 404)]
         public async Task<IActionResult> Post(ServiceBaseDto service)
         {
 
@@ -63,23 +71,34 @@ namespace ServiceP.Controllers
  
             await _myService.createService(providerId, service);
               
-            return Ok("Created it");
+            return Ok(new ApiSuccess("Successfully created the service"));
         }
 
         // PUT api/<ServiceController>/5
         [HttpPut("{id}")]
-        public async Task Put(int id, [FromBody] ServiceBaseDto value)
+        [ProducesResponseType(typeof(ApiSuccess), 200)]
+        [ProducesResponseType(typeof(ApiError), 400)]
+        [ProducesResponseType(typeof(ApiError), 404)]
+        public async Task<IActionResult> Put(int id, [FromBody] ServiceBaseDto value)
         {
             int creatorId = HttpContext.GetUserIdFromToken();
             await _myService.updateServiceDetails(creatorId, id, value);
+            
+            return Ok(new ApiSuccess("Successfully updated the service"));
+
         }
 
         // DELETE api/<ServiceController>/5
         [HttpDelete("{id}")]
-        public async Task Delete(int id)
+        [ProducesResponseType(typeof(ApiError), 400)]
+        [ProducesResponseType(typeof(ApiError), 404)]
+        [ProducesResponseType(typeof(ApiSuccess), 200)]
+        public async Task<IActionResult> Delete(int id)
         {
             int creatorId = HttpContext.GetUserIdFromToken();
             await _myService.deleteService(creatorId, id);
+            return Ok(new ApiSuccess("Successfully deleted the service"));
+
         }
     }
 }
