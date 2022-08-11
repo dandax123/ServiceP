@@ -6,7 +6,7 @@ public class Roles
     public const string Customer = "Customer";
     public const string Provider = "Provider";
     public const string ProviderOrCustomer = Customer + "," + Provider;
-    public const string Admin = Provider + "," + "Admin";
+    public const string Admin = "Admin";
 
     public static string getRole (string role)
     {
