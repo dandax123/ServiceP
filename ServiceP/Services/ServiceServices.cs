@@ -7,8 +7,8 @@ namespace ServiceP.Services
     public class ServiceServices : IService
     {
         DataContext _dataContext;
-        IProvider _myProvider;
-        public ServiceServices(DataContext dataContext, IProvider a)
+        IUser _myProvider;
+        public ServiceServices(DataContext dataContext, IUser a)
         {
             _dataContext = dataContext;
             _myProvider = a;
@@ -19,10 +19,10 @@ namespace ServiceP.Services
             string QTY_TYPE = "qty";
             if (!service.service_type.Equals(HOUR_TYPE) && !service.service_type.Equals(QTY_TYPE))
             {
-                throw new AppException("Invalid type of service. Service type values can only be \"hour\" or  \"qty\"!");
+                throw new AppException("Invalid type of service. Service type values can only be \"time\" or  \"qty\"!");
             }
 
-            Provider creator = await _myProvider.getById(creatorId);
+            User creator = await _myProvider.GetById(creatorId);
             Service newservice = new Service
             {
 
@@ -50,7 +50,7 @@ namespace ServiceP.Services
             return services.ConvertAll(new Converter<Service, ServiceResponseDto>(ServiceDto.Service2ServiceResponseDto));
         }
 
-        public async Task<Provider> getProvider(int serviceId)
+        public async Task<User> getProvider(int serviceId)
         {
             Service y = await GetService(serviceId);
 

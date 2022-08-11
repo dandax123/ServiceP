@@ -38,9 +38,7 @@ builder.Services.AddSwaggerGen(options =>
 
 builder.Services.AddScoped<IAuth, AuthService>();
 builder.Services.AddScoped<IUser, UserService>();
-builder.Services.AddScoped<IProvider, ProviderService>();
 builder.Services.AddScoped<IService, ServiceServices>();
-builder.Services.AddScoped<ICustomer, CustomerService>();
 builder.Services.AddScoped<IBooking, BookingService>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options => {

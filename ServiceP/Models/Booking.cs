@@ -8,7 +8,7 @@ namespace ServiceP.Models
 
         public Service service { get; set; }
 
-        public Customer customer { get; set; }
+        public User customer { get; set; }
         public int quantity { get; set; }
 
 

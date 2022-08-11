@@ -13,14 +13,13 @@ namespace ServiceP.Controllers
     public class AuthController : ControllerBase
     {
 
-        private  IAuth _myAuthService;
+        private  IUser _myAuthService;
         
 
-        public Customer customer;
        
 
 
-        public AuthController(IAuth authService, IProvider myPService, ICustomer myCService)
+        public AuthController(IUser authService)
         {
             _myAuthService = authService;
 

@@ -13,6 +13,11 @@ namespace ServiceP.DTO
             return new UserDescribeDto { first_name  = a.first_name, last_name = a.last_name, role = a.role,  email = a.email };
         }
 
+
+        public static UserDto User2UserDTO(User a)
+        {
+            return new UserDto { first_name = a.first_name, last_name = a.last_name, email = a.email };
+        }
     }
 
     public class UserDescribeDto: UserDto

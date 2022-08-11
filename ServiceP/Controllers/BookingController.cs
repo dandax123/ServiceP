@@ -11,7 +11,7 @@ namespace ServiceP.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = Roles.Customer)]
+    [Authorize(Roles = Roles.ProviderOrCustomer)]
     public class BookingController : ControllerBase
     {
         IBooking _myBookingService;
@@ -21,7 +21,7 @@ namespace ServiceP.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<Booking>> Get()
+        public async Task<IEnumerable<BookingDisplayDto>> Get()
         {
             int customerId = HttpContext.GetUserIdFromToken();
             var values = await _myBookingService.getBookingsByCustomer(customerId);
@@ -32,7 +32,7 @@ namespace ServiceP.Controllers
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(ApiError), 400)]
         [ProducesResponseType(typeof(ApiError), 404)]
-        public async Task<Booking> Get(int id)
+        public async Task<BookingDisplayDto> Get(int id)
         {
 
             int customerId = HttpContext.GetUserIdFromToken();
@@ -50,7 +50,7 @@ namespace ServiceP.Controllers
 
             int customerId = HttpContext.GetUserIdFromToken();
 
-            await _myBookingService.addBooking(booking.serviceId, customerId, booking.quantity);
+            await _myBookingService.addBooking(booking.serviceId, customerId, booking.unit);
 
             return Ok(new ApiSuccess ( "Successfully created the booking"));
         }
@@ -63,7 +63,7 @@ namespace ServiceP.Controllers
         public async Task<IActionResult> Put(int id, [FromBody] BookingUpdateDto request)
         {
             int customerId = HttpContext.GetUserIdFromToken();
-            await _myBookingService.updateBooking(customerId, id, request.quantity);
+            await _myBookingService.updateBooking(customerId, id, request.unit);
             return Ok(new ApiSuccess("Successfully updated the booking"));
         }
 

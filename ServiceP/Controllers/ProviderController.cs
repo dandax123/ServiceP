@@ -13,8 +13,8 @@ namespace ServiceP.Controllers
     [ApiController]
     public class ProviderController : ControllerBase
     {
-        IProvider _myProviderService;
-        public ProviderController(IProvider myProviderService)
+        IUser _myProviderService;
+        public ProviderController(IUser myProviderService)
         {
             _myProviderService = myProviderService; 
         }
@@ -23,14 +23,15 @@ namespace ServiceP.Controllers
         public async Task<UserDescribeDto> Get()
         {
             int customerId = HttpContext.GetUserIdFromToken();
-            return UserDto.User2UserDescribeDTO(await _myProviderService.getById(customerId));
+            return UserDto.User2UserDescribeDTO(await _myProviderService.GetById(customerId));
         }
 
 
         // POST api/<ProviderController>
         [HttpPost]
+        [ProducesResponseType(typeof(LoginResponse), 200)]
         [ProducesResponseType(typeof(ApiError), 400)]
-        public async Task<ActionResult<string>> CustomerRegistration(ProviderRegistrationRequest request)
+        public async Task<IActionResult> CustomerRegistration(ProviderRegistrationRequest request)
         {
 
             var token = await _myProviderService.RegisterProvider(request);
@@ -41,24 +42,26 @@ namespace ServiceP.Controllers
 
         // PUT api/<ProviderController>/5
         [HttpPut, Authorize(Roles = Roles.Provider)]
+        [ProducesResponseType(typeof(ApiSuccess), 200)]
         [ProducesResponseType(typeof(ApiError), 400)]
         [ProducesResponseType(typeof(ApiError), 404)]
         public async Task<IActionResult> Put([FromBody] UserDto value)
         {
             int providerId = HttpContext.GetUserIdFromToken();
-            await _myProviderService.updateProvider(providerId, value);
+            await _myProviderService.updateUser(providerId, value);
             return Ok(new ApiSuccess("Successfully updated Provider"));
         }
 
 
         // DELETE api/<ProviderController>/5
         [HttpDelete, Authorize(Roles = Roles.Provider)]
+        [ProducesResponseType(typeof(ApiSuccess), 200)]
         [ProducesResponseType(typeof(ApiError), 404)]
         public async Task<IActionResult> Delete()
         {
 
             int providerId = HttpContext.GetUserIdFromToken();
-            await _myProviderService.deleteProvider(providerId);
+            await _myProviderService.deleteUser(providerId);
             return Ok(new ApiSuccess("Successfully deleted Provider"));
         }
     }

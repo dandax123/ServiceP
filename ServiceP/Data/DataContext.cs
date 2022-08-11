@@ -13,7 +13,6 @@ public class DataContext: DbContext
 
       public DbSet<Service> Services { get; set; }
 
-       public DbSet<Provider> Providers { get; set; }
-    public DbSet<Customer> Customers { get; set; }
+
 
 }

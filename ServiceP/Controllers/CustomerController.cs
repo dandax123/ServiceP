@@ -13,8 +13,8 @@ namespace ServiceP.Controllers
     [ApiController]
     public class CustomerController : ControllerBase
     {
-        ICustomer _myCustomerService;
-        public CustomerController(ICustomer myCustomerService)
+        IUser _myCustomerService;
+        public CustomerController(IUser myCustomerService)
         {
             _myCustomerService = myCustomerService; 
         }
@@ -25,12 +25,12 @@ namespace ServiceP.Controllers
         public async Task<UserDescribeDto> Get()
         {
             int customerId = HttpContext.GetUserIdFromToken();
-            return UserDto.User2UserDescribeDTO(await _myCustomerService.getById(customerId));
+            return UserDto.User2UserDescribeDTO(await _myCustomerService.GetById(customerId));
         }
 
         [HttpPost]
         [ProducesResponseType(typeof(ApiError), 400)]
-        public async Task<ActionResult<String>> CustomerRegistration(BaseRegistrationRequest request)
+        public async Task<IActionResult> CustomerRegistration(BaseRegistrationRequest request)
         {
            
             var token = await _myCustomerService.RegisterCustomer(request);
@@ -46,7 +46,7 @@ namespace ServiceP.Controllers
         public async Task<IActionResult> Put([FromBody] UserDto value)
         {
             int customerId = HttpContext.GetUserIdFromToken();
-            await _myCustomerService.updateCustomer(customerId, value);
+            await _myCustomerService.updateUser(customerId, value);
             return Ok(new ApiSuccess("Successfully updated customer"));
         }
 
@@ -56,7 +56,7 @@ namespace ServiceP.Controllers
         public async Task<IActionResult> Delete()
         {
             int customerId = HttpContext.GetUserIdFromToken();
-            await _myCustomerService.deleteCustomer(customerId);
+            await _myCustomerService.deleteUser(customerId);
             return Ok(new ApiSuccess("Successfully deleted customer"));
         }
     }

@@ -25,6 +25,7 @@ namespace ServiceP.Controllers
 
         // GET: api/<ServiceController>
         [HttpGet("my_services")]
+        [ProducesResponseType(typeof(IEnumerable<ServiceDto>), 200)]
         [ProducesResponseType(typeof(ApiError), 400)]
         [ProducesResponseType(typeof(ApiError), 404)]
         public async Task<IEnumerable<ServiceDto>> GetMyServices()
@@ -35,6 +36,8 @@ namespace ServiceP.Controllers
 
 
         [HttpGet, AllowAnonymous]
+        [ProducesResponseType(typeof(IEnumerable<ServiceResponseDto>), 200)]
+
         public async Task<IEnumerable<ServiceResponseDto>> Get()
         {
             return (await _myService.getAll());
@@ -42,7 +45,10 @@ namespace ServiceP.Controllers
 
         // GET api/<ServiceController>/5
         [HttpGet("{id}"), AllowAnonymous]
+        [ProducesResponseType(typeof(ServiceResponseDto), 200)]
         [ProducesResponseType(typeof(ApiError), 404)]
+        [ProducesResponseType(typeof(ServiceResponseDto), 200)]
+
         public async Task<ServiceResponseDto> Get(int id)
         {
 
@@ -51,9 +57,11 @@ namespace ServiceP.Controllers
         }
 
         [HttpGet("{id}/bookings")]
+
         [ProducesResponseType(typeof(ApiError), 400)]
+        [ProducesResponseType(typeof(IEnumerable<BookingDisplayDto>), 200)]
         [ProducesResponseType(typeof(ApiError), 404)]
-        public async Task<IEnumerable<Booking>> GetBookingsForService(int id)
+        public async Task<IEnumerable<BookingDisplayDto>> GetBookingsForService(int id)
         {
             int providerId = HttpContext.GetUserIdFromToken();
             return (await _myBooking.getBookingsByService(providerId,id));

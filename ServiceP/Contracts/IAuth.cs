@@ -8,7 +8,6 @@ namespace ServiceP.Repository
     {
 
         string createToken(User a);
-        Task<string> login(LoginRequest request);
 
 
 

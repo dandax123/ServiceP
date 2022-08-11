@@ -19,24 +19,18 @@ public class UserController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<List<User>> Get()
+    public async Task<List<UserDescribeDto>> Get()
     {
 
         return (await _userService.getAll());
     }
 
-    [HttpGet("customers")]
-    public async Task<List<User>> GetCustomers()
-    {
-
-        return (await _userService.getAll());
-    }
-
+    
     [HttpGet("providers")]
-    public async Task<List<User>> GetProviders()
+    public async Task<List<UserDto>> GetProviders()
     {
 
-        return (await _userService.getAll());
+        return (await _userService.getAllProviders());
     }
 
 

@@ -5,13 +5,13 @@ namespace ServiceP.Repository
     public interface IBooking
     {
 
-        Task<IEnumerable<Booking>> getAll();
+        Task<IEnumerable<BookingDisplayDto>> getAll();
 
 
-        Task<IEnumerable<Booking>> getBookingsByCustomer(int customerId);
-        Task<Booking> getBookingDetails(int customerId, int id);
+        Task<IEnumerable<BookingDisplayDto>> getBookingsByCustomer(int customerId);
+        Task<BookingDisplayDto> getBookingDetails(int customerId, int id);
 
-        Task<IEnumerable<Booking>> getBookingsByService(int creatorId, int serviceId);
+        Task<IEnumerable<BookingDisplayDto>> getBookingsByService(int creatorId, int serviceId);
 
         Task updateBooking(int customerId, int id, int quantity);
 

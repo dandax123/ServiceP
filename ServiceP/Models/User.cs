@@ -22,6 +22,13 @@ public class User
     public byte[] password_salt { get; set; }
 
 
+    public List<Booking> bookings { get; set; }
+
+
+    public string brand_name { get; set; } = string.Empty;
+
+    public List<Service> services { get; set; }
+
 
 
 

@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using ServiceP.Models;
 using Microsoft.AspNetCore.Mvc;
 using ServiceP.DTO;
+using ServiceP.Constants;
 
 namespace ServiceP.Services
 {
@@ -16,11 +17,9 @@ namespace ServiceP.Services
         IConfiguration _conf;
 
 
-        IUser _myUser;
-        public AuthService(IConfiguration _t, IUser userService, IUser myUser)
+        public AuthService(IConfiguration _t)
         {
             _conf = _t;
-            _myUser = myUser;   
         }
 
         
@@ -67,7 +66,7 @@ namespace ServiceP.Services
             List<Claim> claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Email, a.email),
-                new Claim (ClaimTypes.Role, a.role ),
+                new Claim (ClaimTypes.Role, a.role),
                 new Claim(ClaimTypes.Name, a.userId.ToString())
             };
 
@@ -81,15 +80,6 @@ namespace ServiceP.Services
             return token;
         }
 
-        public async Task<string> login(LoginRequest request)
-        {
-            User a = await _myUser.FindUserRoleByEmail(request.email);
-            var correct_password = verifyPasswordHash(request.password, a.password_hash, a.password_salt);
-            if (!correct_password)
-            {
-                throw new AppException("Incorrect username or password!");
-            }
-            return createToken(a);
-        }
+  
     }
 }

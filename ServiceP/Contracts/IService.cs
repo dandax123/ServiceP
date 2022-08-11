@@ -18,7 +18,7 @@ namespace ServiceP.Repository
 
         Task updateServiceDetails(int creatorId, int service_id, ServiceBaseDto service_request);
 
-        Task<Provider> getProvider(int serviceId);
+        Task<User> getProvider(int serviceId);
 
     }
 }

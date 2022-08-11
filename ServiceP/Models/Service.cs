@@ -25,7 +25,7 @@ namespace ServiceP.Models
 
 
 
-        public Provider creator { get; set; }
+        public User creator { get; set; }
 
         public List<Booking> bookings { get; set; }
     }
