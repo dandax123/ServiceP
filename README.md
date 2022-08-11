@@ -1,3 +1,3 @@
 # ServiceP
 
-Minimal backend service to handle services and booking system
+Minimal backend service for a service-based booking system
