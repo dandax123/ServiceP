@@ -76,6 +76,11 @@ namespace ServiceP.Services
             return bookings.ConvertAll(new Converter<Booking, BookingDisplayDto>(BookingDto.Booking2BookingDisplayDto));
         }
 
+        public async Task<IEnumerable<BookingDisplayDto>> getBookingsByProvider(int providerID)
+        {
+            var bookings = await _dbcontext.Bookings.Include(y => y.service).Include(y => y.service.creator).Where(y => y.service.creator.userId == providerID).ToListAsync();
+            return bookings.ConvertAll(new Converter<Booking, BookingDisplayDto>(BookingDto.Booking2BookingDisplayDto));
+        }
         public async Task updateBooking(int customerId, int id, int quantity)
         {
             Booking booking = await getBooking(customerId, id);

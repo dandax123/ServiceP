@@ -20,5 +20,7 @@ namespace ServiceP.Repository
 
         Task addBooking(int serviceId, int customerId, int quantity);
 
+        Task<IEnumerable<BookingDisplayDto>> getBookingsByProvider(int providerID);
+
     }
 }

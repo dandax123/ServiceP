@@ -14,9 +14,11 @@ namespace ServiceP.Controllers
     public class ProviderController : ControllerBase
     {
         IUser _myProviderService;
-        public ProviderController(IUser myProviderService)
+        IBooking _myBookingService;
+        public ProviderController(IUser myProviderService, IBooking myBookingService)
         {
-            _myProviderService = myProviderService; 
+            _myProviderService = myProviderService;
+            _myBookingService = myBookingService;
         }
         // GET: api/<ProviderController>
         [HttpGet, Authorize(Roles = Roles.Provider)]
@@ -63,6 +65,17 @@ namespace ServiceP.Controllers
             int providerId = HttpContext.GetUserIdFromToken();
             await _myProviderService.deleteUser(providerId);
             return Ok(new ApiSuccess("Successfully deleted Provider"));
+        }
+
+        [HttpGet("bookings"), Authorize(Roles = Roles.Provider)]
+        [ProducesResponseType(typeof(IEnumerable<BookingDisplayDto>), 200)]
+        [ProducesResponseType(typeof(ApiError), 404)]
+        public async Task<IEnumerable<BookingDisplayDto>> GetMyBookings()
+        {
+
+            int providerId = HttpContext.GetUserIdFromToken();
+            return (await _myBookingService.getBookingsByProvider(providerId));
+     
         }
     }
 }
