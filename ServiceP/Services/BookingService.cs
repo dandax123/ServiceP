@@ -49,7 +49,7 @@ namespace ServiceP.Services
 
         public async Task<IEnumerable<BookingDisplayDto>> getBookingsByService(int creatorId, int serviceId)
         {
-            var bookings = await _dbcontext.Bookings.Include(y => y.customer).Where(y => y.service.serviceId == serviceId && y.service.creator.userId == creatorId).ToListAsync();
+            var bookings = await _dbcontext.Bookings.Include(y => y.customer).Include(y => y.service).Where(y => y.service.serviceId == serviceId && y.service.creator.userId == creatorId).ToListAsync();
             return bookings.ConvertAll(new Converter<Booking, BookingDisplayDto>(BookingDto.Booking2BookingDisplayDto));
             
         }
@@ -62,7 +62,7 @@ namespace ServiceP.Services
 
         public async Task<Booking> getBooking(int customerId, int id)
         {
-            Booking? booking = await _dbcontext.Bookings.Include(y => y.customer).Where(y => y.bookingId == id && y.customer.userId == customerId).FirstAsync();
+            Booking? booking = await _dbcontext.Bookings.Include(y => y.customer).Include(y => y.service).Where(y => y.bookingId == id && y.customer.userId == customerId).FirstAsync();
             if (booking == null)
             {
                 throw new MissingException("Booking Not found");
@@ -72,13 +72,13 @@ namespace ServiceP.Services
 
         public async Task<IEnumerable<BookingDisplayDto>> getBookingsByCustomer(int customerId)
         {
-            var bookings = await _dbcontext.Bookings.Where(y => y.customer.userId == customerId).ToListAsync();
+            var bookings = await _dbcontext.Bookings.Include(y => y.customer).Include(y => y.service).Where(y => y.customer.userId == customerId).ToListAsync();
             return bookings.ConvertAll(new Converter<Booking, BookingDisplayDto>(BookingDto.Booking2BookingDisplayDto));
         }
 
         public async Task<IEnumerable<BookingDisplayDto>> getBookingsByProvider(int providerID)
         {
-            var bookings = await _dbcontext.Bookings.Include(y => y.service).Include(y => y.service.creator).Where(y => y.service.creator.userId == providerID).ToListAsync();
+            var bookings = await _dbcontext.Bookings.Include(y => y.service).Include(y => y.service.creator).Include(y => y.customer).Where(y => y.service.creator.userId == providerID).ToListAsync();
             return bookings.ConvertAll(new Converter<Booking, BookingDisplayDto>(BookingDto.Booking2BookingDisplayDto));
         }
         public async Task updateBooking(int customerId, int id, int quantity)
@@ -90,7 +90,7 @@ namespace ServiceP.Services
 
         public async  Task<IEnumerable<BookingDisplayDto>> getAll()
         {
-            var bookings = await _dbcontext.Bookings.ToListAsync();
+            var bookings = await _dbcontext.Bookings.Include(y => y.customer).Include(y => y.service).ToListAsync();
             return bookings.ConvertAll(new Converter<Booking, BookingDisplayDto>(BookingDto.Booking2BookingDisplayDto));
         }
     }
